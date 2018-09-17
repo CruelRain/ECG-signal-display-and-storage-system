@@ -1,0 +1,39 @@
+
+using System.Xml;
+
+namespace Lead12ECG
+{
+    /// <summary>
+    /// XmlHelper 的摘要说明
+    /// </summary>
+    public class XmlHelper
+    {
+        public static string Read(string path, string node)
+        {
+            string value = "";
+            try
+            {
+                XmlDocument doc = new XmlDocument();
+                doc.Load(path);
+                XmlNode xn = doc.SelectSingleNode(node);
+                value = xn.InnerText;
+            }
+            catch { }
+            return value;
+        }
+        
+        public static void Update(string path, string node, string value)
+        {
+            try
+            {
+                XmlDocument doc = new XmlDocument();
+                doc.Load(path);
+                XmlNode xn = doc.SelectSingleNode(node);
+                XmlElement xe = (XmlElement)xn;
+                xe.InnerText = value;
+                doc.Save(path);
+            }
+            catch { }
+        }
+    }
+}
