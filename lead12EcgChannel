@@ -1,0 +1,274 @@
+using System;
+using System.Collections.Generic;
+
+namespace Lead12ECG
+{
+    public class Lead12EcgChannel
+    {
+        /// <summary>
+        /// 帧的开始标志
+        /// </summary>
+        public const byte StartFlag = 0xfc;
+
+        /// <summary>
+        /// 帧的结束标志
+        /// </summary>
+        public const byte EndFlag = 0xfd;
+
+        /// <summary>
+        /// 转义标志
+        /// </summary>
+        public const byte EscapeFlag = 0xef;
+
+        /// <summary>
+        /// 转义值
+        /// </summary>
+        public const byte EscapeValue = 0x20;
+        
+        /// <summary>
+        /// 有效负载
+        /// </summary>
+        private readonly byte[] _payload = new byte[2];
+
+        /// <summary>
+        /// 使用ECG的有效负载初始化,该字节数组长度为2
+        /// 
+        /// </summary>
+        /// <param name="payload"></param>
+        public Lead12EcgChannel(byte[] payload)
+        {
+            if (payload==null || payload.Length != _payload.Length)
+            {
+                throw new Exception("有效数据长度有误");
+            }
+            payload.CopyTo(_payload,0);
+        }
+        /// <summary>
+        /// 获取该对象的有效负载
+        /// </summary>
+        /// <returns></returns>
+        public byte[] GetPayload()
+        {
+            byte[] buffer=new byte[_payload.Length];
+            _payload.CopyTo(buffer,0);
+            return buffer;
+        }
+ 
+        /// <summary>
+        /// 获取状态字节数组的副本
+        /// </summary>
+        /// <returns></returns>
+        //public byte[] GetStatusBytes()
+        //{
+        //    byte[] buff = new byte[3];
+          //  Array.Copy(_payload,0,buff,0,3);
+            //return buff;
+        //}
+        /// <summary>
+        /// 获取状态的十六进制字符串
+        /// </summary>
+        /// <returns></returns>
+        //public string GetStatusHexString()
+        //{
+          //  string hexStr = "";
+            //for (int i = 0; i < 3; i++)
+            //{
+              //  hexStr += _payload[i].ToString("x2");
+            //}
+            //return hexStr;
+        //}
+
+        /// <summary>
+        /// 获取指定的通道的数值,索引从0开始,ch0,ch1,ch2,...
+        /// </summary>
+        /// <param name="channelIndex"></param>
+        /// <returns></returns>
+        public int GetChannelValue(int channelIndex)
+        {
+            if(channelIndex < 0 || channelIndex >= 1)
+            {
+                throw new Exception("通道索引越界:" + channelIndex);
+            }
+            int startIndex = 0;
+            
+            int retValue = Bytes2Int32(_payload[startIndex], _payload[startIndex+1]);
+            
+            return retValue;
+        }
+        /// <summary>
+        /// 把2个字节的数据(b1,b2)转化为一个Int32正数,
+        /// 
+        /// </summary>
+        /// <param name="b1"></param>
+        /// <param name="b2"></param>
+        /// <param name="b3"></param>
+        /// <returns></returns>
+        private int Bytes2Int32(byte b1,byte b2)
+        {
+            int retValue = 0;
+            //字节转化为整型
+            retValue = (b1 << 8) +b2;
+
+            return retValue;
+        }
+
+        /// <summary>
+        /// 获取指定的通道的字节数组,索引从0开始,ch0,ch1,ch2,...
+        /// </summary>
+        /// <param name="channelIndex"></param>
+        /// <returns></returns>
+      /*  public byte[] GetChannelBytes(int channelIndex)
+       {
+            if (channelIndex < 0 || channelIndex >= 8)
+            {
+                throw new Exception("通道索引越界:" + channelIndex);
+            }
+            int startIndex = 0;
+            byte[] buff = new byte[2];
+            Array.Copy(_payload, startIndex, buff, 0, 2);
+            return buff;
+        }*/
+
+        /// <summary>
+        /// 获取指定的通道的十六进制字符串,索引从0开始,ch0,ch1,ch2,...
+        /// </summary>
+        /// <param name="channelIndex"></param>
+        /// <returns></returns>
+       // public string GetChannelHexString(int channelIndex)
+        //{
+          //  if (channelIndex < 0 || channelIndex >= 8)
+            //{
+              //  throw new Exception("通道索引越界:" + channelIndex);
+            //}
+            //int startIndex = 3 * channelIndex + 3;
+            //string hexStr = "";
+            //for(int i=0;i<3;i++)
+            //{
+             //   hexStr += _payload[startIndex + i].ToString("x2");
+            //}
+            //return hexStr;
+        //}
+
+        /// <summary>
+        /// 转化为帧字节数组,即把有效负载转义,
+        /// 加开始和结束标志后的字节数组形成的发送帧
+        /// </summary>
+        /// <returns></returns>
+        public byte[] ToFrameBytes()
+        {
+            List<byte> buff = new List<byte>(_payload);
+
+            buff.Add(StartFlag);
+
+            foreach (byte b in _payload)
+            {
+                if(b == StartFlag || b == EndFlag || b == EscapeFlag)
+                {
+                    buff.Add(EscapeFlag);
+                    buff.Add((byte)(b ^ EscapeValue));
+                }
+                else
+                {
+                    buff.Add(b);
+                }
+            }
+
+            buff.Add(EndFlag);
+
+            return buff.ToArray();
+        }
+
+        /// <summary>
+        /// 把从发送帧字节数组转化成对象
+        /// </summary>
+        /// <param name="frame"></param>
+        /// <returns></returns>
+        public static Lead12EcgChannel FromFrameBytes(byte[] frame)
+        {
+            if (frame == null || frame.Length == 0 || frame[0] != StartFlag || frame[frame.Length - 1] != EndFlag)
+            {
+                return null;
+            }
+
+            List<byte> buffer = new List<byte>(4);
+
+            for(int i=1;i<frame.Length-1;i++)
+            {
+                if(frame[i]==EscapeFlag)
+                {
+                    buffer.Add((byte)(frame[++i] ^ EscapeValue));
+                }
+                else
+                {
+                    buffer.Add(frame[i]);
+                }
+            }
+
+            return new Lead12EcgChannel(buffer.ToArray());
+        }
+
+        /// <summary>
+        /// 获取单个导联的值
+        /// </summary>
+        /// <param name="lead"></param>
+        /// <returns></returns>
+        public int GetLeadValue(Lead lead)
+        {
+            switch (lead)
+            {
+                ///case Lead.I: //CH1
+                   // return GetChannelValue(1);
+
+                //case Lead.II: //CH2
+                  //  return GetChannelValue(2);
+
+               // case Lead.III: //II - I
+               //     return GetChannelValue(2) - GetChannelValue(1);
+
+               // case Lead.aVF: //II - I/2
+               //     return GetChannelValue(2) - GetChannelValue(1)/2;
+
+               // case Lead.aVL: //I - II/2
+                 //   return GetChannelValue(1) - GetChannelValue(2)/2;
+
+               // case Lead.aVR: //-(I + II)/2
+              //      return -(GetChannelValue(1) + GetChannelValue(2))/2;
+
+             //   case Lead.V1: //CH7
+               //     return GetChannelValue(7);
+
+                //ase Lead.V2: //CH3
+                //    return GetChannelValue(3);
+
+               // case Lead.V3: //CH4
+                    //return GetChannelValue(4);
+
+                //case Lead.V4: //CH5
+                  //  return GetChannelValue(5);
+
+              //  case Lead.V5: //CH6
+              //      return GetChannelValue(6);
+
+                case Lead.V6: //CH0
+                    return GetChannelValue(0);
+            }
+            throw new Exception("不存在的枚举值:" + lead);
+        }
+    }
+
+    public enum Lead
+    {
+        /*I = 0,
+        II,
+        //III,
+        //aVF,
+        //aVL,
+        //aVR,
+        V1,
+        V2,
+        V3,
+        V4,
+        V5,*/
+        V6
+    }
+}
