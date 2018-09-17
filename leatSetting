@@ -1,0 +1,236 @@
+namespace Lead12ECG
+{
+    partial class LeadSettings
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.chkI = new System.Windows.Forms.CheckBox();
+            this.chkIII = new System.Windows.Forms.CheckBox();
+            this.chkaVF = new System.Windows.Forms.CheckBox();
+            this.chkII = new System.Windows.Forms.CheckBox();
+            this.chkaVR = new System.Windows.Forms.CheckBox();
+            this.chkaVL = new System.Windows.Forms.CheckBox();
+            this.chkV1 = new System.Windows.Forms.CheckBox();
+            this.chkV2 = new System.Windows.Forms.CheckBox();
+            this.chkV4 = new System.Windows.Forms.CheckBox();
+            this.chkV5 = new System.Windows.Forms.CheckBox();
+            this.chkV3 = new System.Windows.Forms.CheckBox();
+            this.chkV6 = new System.Windows.Forms.CheckBox();
+            this.btnClose = new System.Windows.Forms.Button();
+            this.SuspendLayout();
+            // 
+            // chkI
+            // 
+            this.chkI.AutoSize = true;
+            this.chkI.Location = new System.Drawing.Point(12, 12);
+            this.chkI.Name = "chkI";
+            this.chkI.Size = new System.Drawing.Size(30, 16);
+            this.chkI.TabIndex = 0;
+            this.chkI.Text = "I";
+            this.chkI.UseVisualStyleBackColor = true;
+            this.chkI.CheckedChanged += new System.EventHandler(this.chkLead_CheckedChanged);
+            // 
+            // chkIII
+            // 
+            this.chkIII.AutoSize = true;
+            this.chkIII.Location = new System.Drawing.Point(206, 12);
+            this.chkIII.Name = "chkIII";
+            this.chkIII.Size = new System.Drawing.Size(42, 16);
+            this.chkIII.TabIndex = 1;
+            this.chkIII.Text = "III";
+            this.chkIII.UseVisualStyleBackColor = true;
+            this.chkIII.CheckedChanged += new System.EventHandler(this.chkLead_CheckedChanged);
+            // 
+            // chkaVF
+            // 
+            this.chkaVF.AutoSize = true;
+            this.chkaVF.Location = new System.Drawing.Point(12, 45);
+            this.chkaVF.Name = "chkaVF";
+            this.chkaVF.Size = new System.Drawing.Size(42, 16);
+            this.chkaVF.TabIndex = 2;
+            this.chkaVF.Text = "aVF";
+            this.chkaVF.UseVisualStyleBackColor = true;
+            this.chkaVF.CheckedChanged += new System.EventHandler(this.chkLead_CheckedChanged);
+            // 
+            // chkII
+            // 
+            this.chkII.AutoSize = true;
+            this.chkII.Location = new System.Drawing.Point(106, 12);
+            this.chkII.Name = "chkII";
+            this.chkII.Size = new System.Drawing.Size(36, 16);
+            this.chkII.TabIndex = 0;
+            this.chkII.Text = "II";
+            this.chkII.UseVisualStyleBackColor = true;
+            this.chkII.CheckedChanged += new System.EventHandler(this.chkLead_CheckedChanged);
+            // 
+            // chkaVR
+            // 
+            this.chkaVR.AutoSize = true;
+            this.chkaVR.Location = new System.Drawing.Point(206, 45);
+            this.chkaVR.Name = "chkaVR";
+            this.chkaVR.Size = new System.Drawing.Size(42, 16);
+            this.chkaVR.TabIndex = 1;
+            this.chkaVR.Text = "aVR";
+            this.chkaVR.UseVisualStyleBackColor = true;
+            this.chkaVR.CheckedChanged += new System.EventHandler(this.chkLead_CheckedChanged);
+            // 
+            // chkaVL
+            // 
+            this.chkaVL.AutoSize = true;
+            this.chkaVL.Location = new System.Drawing.Point(106, 45);
+            this.chkaVL.Name = "chkaVL";
+            this.chkaVL.Size = new System.Drawing.Size(42, 16);
+            this.chkaVL.TabIndex = 2;
+            this.chkaVL.Text = "aVL";
+            this.chkaVL.UseVisualStyleBackColor = true;
+            this.chkaVL.CheckedChanged += new System.EventHandler(this.chkLead_CheckedChanged);
+            // 
+            // chkV1
+            // 
+            this.chkV1.AutoSize = true;
+            this.chkV1.Location = new System.Drawing.Point(12, 78);
+            this.chkV1.Name = "chkV1";
+            this.chkV1.Size = new System.Drawing.Size(36, 16);
+            this.chkV1.TabIndex = 0;
+            this.chkV1.Text = "V1";
+            this.chkV1.UseVisualStyleBackColor = true;
+            this.chkV1.CheckedChanged += new System.EventHandler(this.chkLead_CheckedChanged);
+            // 
+            // chkV2
+            // 
+            this.chkV2.AutoSize = true;
+            this.chkV2.Location = new System.Drawing.Point(106, 78);
+            this.chkV2.Name = "chkV2";
+            this.chkV2.Size = new System.Drawing.Size(36, 16);
+            this.chkV2.TabIndex = 0;
+            this.chkV2.Text = "V2";
+            this.chkV2.UseVisualStyleBackColor = true;
+            this.chkV2.CheckedChanged += new System.EventHandler(this.chkLead_CheckedChanged);
+            // 
+            // chkV4
+            // 
+            this.chkV4.AutoSize = true;
+            this.chkV4.Location = new System.Drawing.Point(12, 111);
+            this.chkV4.Name = "chkV4";
+            this.chkV4.Size = new System.Drawing.Size(36, 16);
+            this.chkV4.TabIndex = 1;
+            this.chkV4.Text = "V4";
+            this.chkV4.UseVisualStyleBackColor = true;
+            this.chkV4.CheckedChanged += new System.EventHandler(this.chkLead_CheckedChanged);
+            // 
+            // chkV5
+            // 
+            this.chkV5.AutoSize = true;
+            this.chkV5.Location = new System.Drawing.Point(106, 111);
+            this.chkV5.Name = "chkV5";
+            this.chkV5.Size = new System.Drawing.Size(36, 16);
+            this.chkV5.TabIndex = 1;
+            this.chkV5.Text = "V5";
+            this.chkV5.UseVisualStyleBackColor = true;
+            this.chkV5.CheckedChanged += new System.EventHandler(this.chkLead_CheckedChanged);
+            // 
+            // chkV3
+            // 
+            this.chkV3.AutoSize = true;
+            this.chkV3.Location = new System.Drawing.Point(206, 78);
+            this.chkV3.Name = "chkV3";
+            this.chkV3.Size = new System.Drawing.Size(36, 16);
+            this.chkV3.TabIndex = 2;
+            this.chkV3.Text = "V3";
+            this.chkV3.UseVisualStyleBackColor = true;
+            this.chkV3.CheckedChanged += new System.EventHandler(this.chkLead_CheckedChanged);
+            // 
+            // chkV6
+            // 
+            this.chkV6.AutoSize = true;
+            this.chkV6.Location = new System.Drawing.Point(206, 111);
+            this.chkV6.Name = "chkV6";
+            this.chkV6.Size = new System.Drawing.Size(36, 16);
+            this.chkV6.TabIndex = 2;
+            this.chkV6.Text = "V6";
+            this.chkV6.UseVisualStyleBackColor = true;
+            this.chkV6.CheckedChanged += new System.EventHandler(this.chkLead_CheckedChanged);
+            // 
+            // btnClose
+            // 
+            this.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnClose.Location = new System.Drawing.Point(191, 142);
+            this.btnClose.Name = "btnClose";
+            this.btnClose.Size = new System.Drawing.Size(52, 23);
+            this.btnClose.TabIndex = 3;
+            this.btnClose.Text = "关闭";
+            this.btnClose.UseVisualStyleBackColor = true;
+            this.btnClose.Click += new System.EventHandler(this.btnCancel_Click);
+            // 
+            // LeadSettings
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.btnClose;
+            this.ClientSize = new System.Drawing.Size(272, 177);
+            this.Controls.Add(this.btnClose);
+            this.Controls.Add(this.chkV6);
+            this.Controls.Add(this.chkaVL);
+            this.Controls.Add(this.chkV3);
+            this.Controls.Add(this.chkaVF);
+            this.Controls.Add(this.chkV5);
+            this.Controls.Add(this.chkaVR);
+            this.Controls.Add(this.chkV4);
+            this.Controls.Add(this.chkIII);
+            this.Controls.Add(this.chkV2);
+            this.Controls.Add(this.chkV1);
+            this.Controls.Add(this.chkII);
+            this.Controls.Add(this.chkI);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "LeadSettings";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "设置需要显示的导联";
+            this.Load += new System.EventHandler(this.LeadSettings_Load);
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
+        }
+
+        #endregion
+
+        private System.Windows.Forms.CheckBox chkI;
+        private System.Windows.Forms.CheckBox chkIII;
+        private System.Windows.Forms.CheckBox chkaVF;
+        private System.Windows.Forms.CheckBox chkII;
+        private System.Windows.Forms.CheckBox chkaVR;
+        private System.Windows.Forms.CheckBox chkaVL;
+        private System.Windows.Forms.CheckBox chkV1;
+        private System.Windows.Forms.CheckBox chkV2;
+        private System.Windows.Forms.CheckBox chkV4;
+        private System.Windows.Forms.CheckBox chkV5;
+        private System.Windows.Forms.CheckBox chkV3;
+        private System.Windows.Forms.CheckBox chkV6;
+        private System.Windows.Forms.Button btnClose;
+    }
+}
