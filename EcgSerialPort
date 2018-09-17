@@ -1,0 +1,181 @@
+using System;
+using System.Collections.Generic;
+using System.IO.Ports;
+using System.Windows.Forms;
+
+namespace Lead12ECG
+{
+    public class EcgSerialPort
+    {
+        private readonly SerialPort _serialPort = new SerialPort();
+        private readonly object o = new object();
+
+        public delegate void EcgDataReceivedHandler(object sender, EcgDataReceivedEventArgs e);
+
+        public event EcgDataReceivedHandler EcgDataReceived;
+
+        public EcgSerialPort()
+        {
+            InitPort();
+        }
+        public string PortName
+        {
+            get { return _serialPort.PortName; }
+        }
+
+        public void Write(byte[] data)
+        {
+            _serialPort.Write(data,0,data.Length);
+        }
+
+        /// <summary>
+        /// 初始化COM相关参数,注意，该函数只需要在窗体构造函数中调用一次即可，否则会出问题
+        /// </summary>
+        private void InitPort()
+        {
+            _serialPort.BaudRate = 115200;
+            _serialPort.DataBits = 8;
+            _serialPort.StopBits = StopBits.One;
+            _serialPort.DtrEnable = false;
+            _serialPort.RtsEnable = false;
+            _serialPort.Parity = Parity.None;
+            _serialPort.ReceivedBytesThreshold = 4;
+           
+            _serialPort.DataReceived += new SerialDataReceivedEventHandler(serialPort1_DataReceived);
+           // MessageBox.Show("kaishi");
+
+        }
+
+        public bool IsOpen
+        {
+            get { return _serialPort.IsOpen; }
+        }
+
+        /// <summary>
+        /// 打开端口，并开始采集数据
+        /// </summary>
+        public bool OpenPort(string portName)
+        {
+            if (_serialPort.IsOpen == false)
+            {
+                //设置串口参数
+                _serialPort.PortName = portName;
+
+                lock (o)
+                {
+                    _serialPort.Open(); //打开串口
+                    _isAlive = true; //修改状态为正在采集
+                }
+            }
+
+            return _serialPort.IsOpen;
+        }
+        /// <summary>
+        /// 关闭端口，退出应用程序，或需要重新配置参数时关闭端口
+        /// </summary>
+        /// <returns></returns>
+        public void ClosePort()
+        {
+            if (_serialPort.IsOpen == false)
+            {
+                return;
+            }
+
+            lock (o)
+            {
+                _isAlive = false;
+            }
+
+            while (_isReceiving) Application.DoEvents(); //等待完成DataReceived事件
+            lock (this)
+            {
+                _serialPort.Close();
+            }
+        }
+
+        private bool _isReceiving = false;  //指示DataReceived事件是否正在进行
+        private bool _isAlive = false;      //指示是否正在采集数据
+
+
+        private void serialPort1_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            _isReceiving = true;
+           // MessageBox.Show("c测试画图");
+            try
+            {
+                
+                while (_serialPort.BytesToRead > 0 && _isAlive)
+                {
+                    try
+                    {
+                        int b;
+                        do
+                        {
+                            b =_serialPort.ReadByte();
+                            if (b == -1)
+                            {
+                                return;
+                            }
+                            if (b == Lead12EcgChannel.StartFlag)
+                            {
+                                break;
+                            }
+                        } while (true);
+
+                        List<byte> buff = new List<byte>(6);
+                        buff.Add(0xfc);
+
+                        do
+                        {
+                            b = _serialPort.ReadByte();
+                            if (b == -1)
+                            {
+                                return;
+                            }
+                            if (b == Lead12EcgChannel.EndFlag)
+                            {
+                                break;
+                            }
+                            buff.Add((byte)b);
+                            
+
+                        } while (true);
+
+                        buff.Add(0xfd);
+
+                        Lead12EcgChannel chl = Lead12EcgChannel.FromFrameBytes(buff.ToArray());
+
+                        if(EcgDataReceived!=null)
+                        {
+                            EcgDataReceived(this,new EcgDataReceivedEventArgs(chl));
+                        }
+                    }
+                    catch
+                    {
+                        return;
+                    }
+                }
+            }
+            catch { }
+            finally
+            {
+                _isReceiving = false;
+            }
+        }
+        
+        }
+    public class EcgDataReceivedEventArgs:EventArgs
+    {
+        private readonly Lead12EcgChannel _channel;
+
+        public Lead12EcgChannel EcgChannel
+        {
+            get { return _channel; }
+        }
+
+        public EcgDataReceivedEventArgs(Lead12EcgChannel channel)
+        {
+            _channel = channel;
+        }
+    }
+}
